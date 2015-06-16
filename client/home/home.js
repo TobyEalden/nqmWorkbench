@@ -11,7 +11,7 @@ Template.home.rendered = function() {
       auto: true,
       float: false,
       cell_height: 80,
-      vertical_margin: 10,
+      vertical_margin: 20,
       resizable: {
         handles: 'e, se, s, sw, w'
       },
@@ -37,3 +37,16 @@ Template.home.rendered = function() {
     visualisationCache.update();
   }
 };
+
+Template.home.events({
+  "click #nqm-theme-change-btn": function(event, template) {
+    var themes = Object.keys(Session.get("themes"));
+    var current = themes.indexOf(Session.get("theme"));
+    current++;
+    if (current == themes.length) {
+      current = 0;
+    }
+    Session.set("theme",themes[current]);
+    Materialize.toast(themes[current],2000);
+  }
+});

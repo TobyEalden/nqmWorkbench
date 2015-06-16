@@ -76,9 +76,6 @@ SeriesBase = (function() {
     this.onInitialise();
 
     this.checkSize();
-
-    d3.select("#nqm-vis-loading-" + this._config._id).remove();
-    this._svgElement.classed("nqm-not-visible", false);
   };
 
   // Placeholders for derived class methods.
@@ -107,8 +104,8 @@ SeriesBase = (function() {
 
       // Assumes timestamps are milliseconds since 1970.
       var extentHours = (xExtent[1] - xExtent[0])/1000/60/60;
-      if (extentHours > 48) {
-        this._xAxis.ticks(d3.time.mondays, 1).tickFormat(d3.time.format('%a %d'));
+      if (extentHours > 72) {
+        this._xAxis.ticks(d3.time.days, 1).tickFormat(d3.time.format('%a %d'));
       } else if (extentHours > 24) {
         this._xAxis.ticks(d3.time.hours, 8).tickFormat(d3.time.format('%I %p'));
       } else if (extentHours > 12) {

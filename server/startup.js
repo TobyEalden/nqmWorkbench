@@ -44,8 +44,16 @@ Meteor.startup(function() {
     return feeds.find({ evtName: "created" });
   });
   Meteor.publish("feedData", function(opts) {
+    var lookup = {
+      evtName: "feedData",
+      key: { hubId: opts.hubId, id: opts.feed }
+    };
+    if (opts.from) {
+      lookup["params.timestamp"] = { $gt: opts.from };
+    }
     opts.limit = opts.limit || 1000;
-    return feeds.find({ evtName: "feedData", key: { hubId: opts.hubId, id: opts.feed }, "params.timestamp": { $gt: opts.from }},{ sort: { "params.timestamp": -1 }, limit: opts.limit });
+
+    return feeds.find(lookup,{ sort: { "params.timestamp": -1 }, limit: opts.limit });
   });
   Meteor.publish("widgetTypes", function() {
     return widgetTypes.find();
