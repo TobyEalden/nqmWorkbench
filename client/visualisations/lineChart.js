@@ -4,11 +4,10 @@
 
 Template.lineChart.onCreated(function() {
   this._visualisation = new LineChart(this.data);
-  startVisualisationSubscriptions.call(this);
 });
 
 Template.lineChart.onRendered(function() {
-  visualisationReady.call(this);
+  startVisualisationSubscriptions.call(this);
 });
 
 Template.lineChart.onDestroyed(function() {

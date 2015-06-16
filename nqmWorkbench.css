@@ -29,13 +29,17 @@ main {
 }
 
 .x.axis text, .y.axis text {
-    fill: #666;
+    fill: #aaa;
 }
 
 .line {
     fill: none;
     stroke: orange;
     stroke-width: 2;
+}
+
+.nqm-blank {
+    background-color: black;
 }
 
 .nqm-svg {
@@ -52,11 +56,8 @@ main {
     margin-right:auto;
 }
 
-.progress.nqm-visualisationProgress {
-    width: 70%;
+.nqm-visualisationProgress {
     margin-top: 15%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .nqm-visualisationTitle {

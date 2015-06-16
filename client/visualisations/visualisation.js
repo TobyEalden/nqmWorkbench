@@ -41,13 +41,13 @@ startVisualisationSubscriptions = function() {
 
   console.log("starting subscription for: " + cfg.name);
 
-  Session.set("ready-" + cfg._id,undefined);
-
   var midnight = new Date(Date.now());
   midnight.setHours(0);
   midnight.setMinutes(0);
   midnight.setSeconds(0);
   midnight.setMilliseconds(0);
+
+  cfg.collection = [];
 
   // Subscribe to all feed data since midnight.
   this._subscription = Meteor.subscribe("feedData", { hubId: cfg.hubId, feed: cfg.feedName, from: midnight.getTime() });
@@ -57,28 +57,38 @@ startVisualisationSubscriptions = function() {
       // Build the projection based on the visualisation configuration.
       console.log("re-running data collection: " + cfg._id);
 
+      var timer = Date.now();
+
+      console.log(cfg.feedName + " starting find: " + (Date.now() - timer));
       var projection = {
         fields: {},
         sort: { "params.timestamp": 1 }
       };
       projection.fields["params." + cfg.series] = 1;
       projection.fields["params." + cfg.datum] = 1;
-      cfg.collection = feeds.find({ evtName: "feedData", "key.id": cfg.feedName}, projection).fetch();
 
-      if (Session.get("ready-" + cfg._id) === true) {
-        vis.render();
-        visualisationCache.add(cfg, vis);
-      }
+      var cursor = feeds.find({ evtName: "feedData", "key.id": cfg.feedName}, projection);
+      console.log(cfg.feedName + " finished find: " + (Date.now() - timer));
+
+      cursor.observe({
+        added: function(d) {
+          cfg.collection.push(d);
+          vis.render();
+        },
+        removedAt: function(d, idx) {
+          cfg.collection.splice(idx,1);
+          vis.render();
+        }
+      });
+
+      console.log(cfg.feedName + " data loaded: " + (Date.now() - timer));
+      vis.render();
+      visualisationCache.add(cfg, vis, self.firstNode.parentNode.parentNode.parentNode);
     }
   });
 };
 
-visualisationReady = function() {
-  Session.set("ready-" + this.data._id,true);
-};
-
 stopVisualisationSubscriptions = function() {
-  Session.set("ready-" + this.data._id,undefined);
   if (this._watchdog) {
     this._watchdog.stop();
     delete this._watchdog;

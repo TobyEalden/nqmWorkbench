@@ -4,11 +4,10 @@
 
 Template.scatterPlot.onCreated(function() {
   this._visualisation = new ScatterPlot(this.data);
-  startVisualisationSubscriptions.call(this);
 });
 
 Template.scatterPlot.onRendered(function() {
-  visualisationReady.call(this);
+  startVisualisationSubscriptions.call(this);
 });
 
 Template.scatterPlot.onDestroyed(function() {

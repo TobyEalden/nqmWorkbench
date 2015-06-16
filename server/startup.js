@@ -44,7 +44,8 @@ Meteor.startup(function() {
     return feeds.find({ evtName: "created" });
   });
   Meteor.publish("feedData", function(opts) {
-    return feeds.find({ evtName: "feedData", key: { hubId: opts.hubId, id: opts.feed }, "params.timestamp": { $gt: opts.from }},{ sort: { "params.timestamp": -1 }, limit: 1000 });
+    opts.limit = opts.limit || 1000;
+    return feeds.find({ evtName: "feedData", key: { hubId: opts.hubId, id: opts.feed }, "params.timestamp": { $gt: opts.from }},{ sort: { "params.timestamp": -1 }, limit: opts.limit });
   });
   Meteor.publish("widgetTypes", function() {
     return widgetTypes.find();

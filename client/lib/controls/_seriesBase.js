@@ -3,7 +3,7 @@
  */
 
 SeriesBase = (function() {
-  var updateDelayTimeout = 50;
+  var updateDelayTimeout = 100;
 
   // Constructor
   function SeriesBase(cfg) {
@@ -98,8 +98,24 @@ SeriesBase = (function() {
   // Call this every time some data changes.
   var scaleAndRender = function() {
     if (this._config.collection) {
+      var timer = Date.now();
+      console.log(this._config.type + " starting render: " + (Date.now() - timer));
+
       // Set the axis domain range.
-      this._xScale.domain(d3.extent(this._config.collection, this._xValue));
+      var xExtent = d3.extent(this._config.collection, this._xValue);
+      this._xScale.domain(xExtent);
+
+      // Assumes timestamps are milliseconds since 1970.
+      var extentHours = (xExtent[1] - xExtent[0])/1000/60/60;
+      if (extentHours > 48) {
+        this._xAxis.ticks(d3.time.mondays, 1).tickFormat(d3.time.format('%a %d'));
+      } else if (extentHours > 24) {
+        this._xAxis.ticks(d3.time.hours, 8).tickFormat(d3.time.format('%I %p'));
+      } else if (extentHours > 12) {
+        this._xAxis.ticks(d3.time.hours, 4).tickFormat(d3.time.format('%I %p'));
+      } else {
+        this._xAxis.ticks(d3.time.hours, 1).tickFormat(d3.time.format('%I %p'));
+      }
 
       var dataDomain = d3.extent(this._config.collection, this._yValue);
       this._yScale.domain(dataDomain);
@@ -116,6 +132,7 @@ SeriesBase = (function() {
         .call(this._yAxis);
 
       this.onRender(this._renderGroup);
+      console.log(this._config.type + " finished render: " + (Date.now() - timer));
     }
 
     this._timeout = 0;
@@ -150,7 +167,7 @@ SeriesBase = (function() {
       height = this._height - this._margins.top - this._margins.bottom;
 
       this._xScale = d3.time.scale().range([0, width]);
-      this._xAxis = d3.svg.axis().scale(this._xScale).orient("bottom").ticks(5);
+      this._xAxis = d3.svg.axis().scale(this._xScale).orient("bottom");
 
       this._yScale = d3.scale.linear().range([height, 0]);
       this._yAxis = d3.svg.axis().scale(this._yScale).orient("left");

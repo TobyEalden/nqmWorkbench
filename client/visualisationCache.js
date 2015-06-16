@@ -38,11 +38,13 @@ visualisationCache = (function() {
   };
 
   var update = function(items) {
-    if (false && items) {
+    if (items) {
       for (var i = 0, len = items.length; i < len; i++) {
         var visInfo = find(items[i].el.get(0));
         if (visInfo) {
           visInfo.visualisation.checkSize();
+        } else {
+          console.log("!!!! unknown item in visualisation cache update");
         }
       }
     } else {
