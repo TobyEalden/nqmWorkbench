@@ -5,7 +5,7 @@
 Template.home.rendered = function() {
   if (!this.rendered) {
     this.rendered = true;
-    console.log("rendered " + this.view.renderCount + " times");
+    console.log("home template rendered " + this.view.renderCount + " times");
 
     var options = {
       auto: true,

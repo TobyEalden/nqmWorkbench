@@ -97,9 +97,6 @@ SeriesBase = (function() {
   // Helper function to perform an animated transition of the bound data.
   // Call this every time some data changes.
   var scaleAndRender = function() {
-    console.log(this._config.type + " rendering");
-    var self = this;
-
     if (this._config.collection) {
       // Set the axis domain range.
       this._xScale.domain(d3.extent(this._config.collection, this._xValue));
@@ -162,48 +159,6 @@ SeriesBase = (function() {
         .attr("transform", "translate(" + 0 + "," + height + ")");
 
       throttledRender.call(this);
-    }
-  };
-
-  SeriesBase.prototype.startObserver = function() {
-    var self = this;
-    var cfg = this._config;
-
-    var midnight = new Date(Date.now());
-    midnight.setHours(0);
-    midnight.setMinutes(0);
-    midnight.setSeconds(0);
-    midnight.setMilliseconds(0);
-
-    // Subscribe to all feed data since midnight.
-    self._subscription = Meteor.subscribe("feedData", { hubId: cfg.hubId, feed: cfg.feedName, from: midnight.getTime() }, function() {
-      if (self._watchdog) {
-        self._watchdog.stop();
-      }
-      self._watchdog = Meteor.autorun(function() {
-        // Build the projection based on the visualisation configuration.
-        var projection = {
-          fields: {},
-          sort: { "params.timestamp": 1 }
-        };
-        projection.fields["params." + cfg.series] = 1;
-        projection.fields["params." + cfg.datum] = 1;
-        cfg.collection = feeds.find({ evtName: "feedData", "key.id": cfg.feedName}, projection).fetch();
-
-        if (Session.get("ready-" + cfg._id) === true) {
-          self.render();
-          visualisationCache.add(cfg, self);
-        }
-      });
-    });
-  };
-
-  SeriesBase.prototype.destroy = function() {
-    if (this._subscription) {
-      this._subscription.stop();
-    }
-    if (this._watchdog) {
-      this._watchdog.stop();
     }
   };
 
