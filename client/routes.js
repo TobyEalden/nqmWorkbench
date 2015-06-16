@@ -11,7 +11,8 @@ var homeRoute =  {
   },
   data: function() {
     return {
-      nqmMainColour: Session.get("nqmMainColour"),
+      nqmMainColour: Session.get("nqmMainColour") || "grey",
+      nqmMenuTextColour: Session.get("nqmMenuTextColour") || "black",
       visualisations: visualisations.find().fetch()
     }
   }

@@ -1,15 +1,15 @@
 <template name="homeLayout">
   <header>
-    <nav class="{{nqmMainColour}} lighten-4 z-depth-3" role="navigation">
+    <nav class="{{nqmMainColour}} lighten-2 z-depth-3" role="navigation">
         <div class="nav-wrapper">
-            <a id="logo-container" class="brand-logo right {{nqmMainColour}}-text text-darken-4" href="/"><span style="font-weight: bold;">nquiring</span><span style="font-weight: lighter;">minds</span></a>
+            <a id="logo-container" class="brand-logo right {{nqmMainColour}}-text text-darken-4" href="/"><span style="font-weight: bold;">nquiring</span><span style="font-weight: lighter;">workshop</span></a>
             <ul class="left hide-on-med-and-down">
                {{> menuOptions}}
             </ul>
             <ul class="side-nav" id="nav-mobile" >
                {{> menuOptions}}
             </ul>
-            <a href="#" data-activates="nav-mobile" class="button-collapse grey-text text-darken-4"><i class="mdi-navigation-menu"></i></a>
+            <a href="#" data-activates="nav-mobile" class="button-collapse {{nqmMenuTextColour}}"><i class="mdi-navigation-menu"></i></a>
         </div>
     </nav>
   </header>
@@ -30,8 +30,8 @@
 </template>
 
 <template name="menuOptions">
-    <li class=""><a class="grey-text text-darken-4" href="/visualise"><i class="left tiny mdi-action-view-quilt"></i>visualise</a></li>
-    <li class=""><a class="grey-text text-darken-4" href="/feeds"><i class="left tiny mdi-content-archive"></i>data</a></li>
-    <li class=""><a class="grey-text text-darken-4" href="/devices"><i class="left tiny mdi-communication-stay-current-portrait"></i>devices</a></li>
-    <li class=""><a class="grey-text text-darken-4" href="/about"><i class="left tiny mdi-action-info-outline"></i>about</a></li>
+    <li class=""><a class="{{nqmMenuTextColour}}" href="/visualise"><i class="left tiny mdi-action-view-quilt"></i>visualise</a></li>
+    <li class=""><a class="{{nqmMenuTextColour}}" href="/feeds"><i class="left tiny mdi-content-archive"></i>data</a></li>
+    <li class=""><a class="{{nqmMenuTextColour}}" href="/devices"><i class="left tiny mdi-communication-stay-current-portrait"></i>devices</a></li>
+    <li class=""><a class="{{nqmMenuTextColour}}" href="/about"><i class="left tiny mdi-action-info-outline"></i>about</a></li>
 </template>
