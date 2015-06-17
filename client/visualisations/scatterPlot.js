@@ -7,6 +7,11 @@ Template.scatterPlot.onCreated(function() {
 });
 
 Template.scatterPlot.onRendered(function() {
+  if (this.rendered) {
+    console.log("******** ALREADY RENDERED");
+  }
+
+  this.rendered = true;
   startVisualisationSubscriptions.call(this);
 });
 

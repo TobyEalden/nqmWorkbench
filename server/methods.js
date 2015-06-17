@@ -14,7 +14,10 @@ Meteor.methods({
       throw new Error("unknown widget type: " + widget.type);
     }
   },
-  removeWidget: function(widget) {
-    return visualisations.remove({_id: widget.id});
+  updateWidgetPosition: function(widget) {
+    return visualisations.update({_id: widget._id}, { $set: { position: widget.position } });
+  },
+  removeWidget: function(widgetId) {
+    return visualisations.remove({_id: widgetId});
   }
 });

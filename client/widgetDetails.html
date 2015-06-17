@@ -20,28 +20,16 @@
     <div class="nqm-clearFloat"></div>
     <div class="section {{showDataSourceConfigure}}">
         <a id="configureDataSource"><h5>configure data source</h5></a>
-        <label>Series field</label>
-        <div class="input-field col s12">
-            <select id="seriesSelect">
-                <option value="" disabled selected>[choose series field]</option>
-                <option value="timestamp">timestamp</option>
-                <option value="temperature">temperature</option>
-                <option value="photoPercent">photoPercent</option>
-            </select>
-        </div>
-        <label>Data field</label>
-        <div class="input-field col s12">
-            <select id="dataSelect">
-                <option value="" disabled selected>[choose data field]</option>
-                <option value="timestamp">timestamp</option>
-                <option value="temperature">temperature</option>
-                <option value="photoPercent">photo percent</option>
-                <option value="brightness">brightness</option>
-                <option value="power">power</option>
-                <option value="co2">co2</option>
-                <option value="humidity">humidity</option>
-            </select>
-        </div>
+        <!--<label>Series field</label>-->
+        <!--<div class="input-field col s12">-->
+            <!--<select id="seriesSelect">-->
+                <!--<option value="" disabled selected>[choose series field]</option>-->
+                <!--<option value="timestamp">timestamp</option>-->
+                <!--<option value="temperature">temperature</option>-->
+                <!--<option value="photoPercent">photoPercent</option>-->
+            <!--</select>-->
+        <!--</div>-->
+        {{> dataFieldSelect}}
     </div>
     <div class="nqm-clearFloat"></div>
     <div class="section {{showFinish}}">
@@ -59,5 +47,16 @@
 <template name="dataSourceButton">
     <div class="left nqm-widget-selector-button valign-wrapper center {{dataSourceSelected}}">
         <a id="nqm-data-source-{{key.id}}" class="valign waves-effect waves-green btn nqm-data-source-selection"><i class="{{params.icon}} left"></i>{{params.name}}</a>
+    </div>
+</template>
+
+<template name="dataFieldSelect">
+    <div class="input-field col s12">
+        <select id="dataSelect">
+            <option value="" disabled selected>[choose data field]</option>
+            {{#each schemaFields}}
+              <option value="{{name}}">{{name}}</option>
+            {{/each}}
+        </select>
     </div>
 </template>

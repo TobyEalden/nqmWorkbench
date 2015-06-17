@@ -42,15 +42,17 @@ visualisationCache = (function() {
       for (var i = 0, len = items.length; i < len; i++) {
         var visInfo = find(items[i].el.get(0));
         if (visInfo) {
-          visInfo.visualisation.checkSize();
+          visInfo.visualisation.visualisationPositionChanged(items[i].x,items[i].y,items[i].width,items[i].height);
         } else {
           console.log("!!!! unknown item in visualisation cache update");
         }
       }
     } else {
+      console.log("**************** STOP ****************");
+      debugger;
       for (var c in cache) {
         if (cache.hasOwnProperty(c)) {
-          cache[c].visualisation.checkSize();
+          cache[c].visualisation.visualisationPositionChanged();
         }
       }
     }

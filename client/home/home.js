@@ -34,7 +34,7 @@ Template.home.rendered = function() {
       }
     );
 
-    visualisationCache.update();
+    //visualisationCache.update();
   }
 };
 

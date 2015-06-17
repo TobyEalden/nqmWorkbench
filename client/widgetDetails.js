@@ -5,12 +5,8 @@
 Template.widgetDetails.onCreated(function() {
   Session.set("widgetType",undefined);
   Session.set("dataSource",undefined);
-  Session.set("seriesField",undefined);
+  Session.set("seriesField","timestamp");
   Session.set("dataField",undefined);
-});
-
-Template.widgetDetails.onRendered(function() {
-  $('select').material_select();
 });
 
 Template.widgetDetails.helpers({
@@ -39,7 +35,8 @@ Template.widgetDetails.events({
       hubId: Session.get("dataSource").key.hubId,
       feedName: Session.get("dataSource").key.id,
       series: Session.get("seriesField"),
-      datum: Session.get("dataField")
+      datum: Session.get("dataField"),
+      position: {}
     };
     Meteor.call("addWidget", widget, function(err,result) {
       if (!err) {
@@ -61,7 +58,7 @@ Template.widgetTypeButton.events({
   "click .nqm-widget-type-selection": function(event, template) {
     Session.set("widgetType", template.data);
     Session.set("dataSource", undefined);
-    Session.set("seriesField",undefined);
+    Session.set("seriesField","timestamp");
     Session.set("dataField",undefined);
     setTimeout(function() {
       var aTag = $("#chooseDataSource");
@@ -74,6 +71,7 @@ Template.dataSourceButton.events({
   "click .nqm-data-source-selection": function(event, template) {
     Session.set("dataSource", template.data);
     setTimeout(function() {
+      $('select').material_select();
       var aTag = $("#configureDataSource");
       $('html,body').animate({scrollTop: aTag.offset().top},'slow');
     },0);
@@ -83,5 +81,14 @@ Template.dataSourceButton.events({
 Template.dataSourceButton.helpers({
   dataSourceSelected: function() {
     return Session.get("dataSource") && Template.instance().data.params.name === Session.get("dataSource").params.name ? "amber accent-1" : "";
+  }
+});
+
+Template.dataFieldSelect.onRendered(function() {
+});
+
+Template.dataFieldSelect.helpers({
+  schemaFields: function() {
+    return Session.get("dataSource") ? _.filter(Session.get("dataSource").params.schema.fields,function(i) { return i.name !== "timestamp"; }) : [];
   }
 });

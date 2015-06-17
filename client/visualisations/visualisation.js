@@ -2,28 +2,9 @@
  * Created by toby on 10/06/15.
  */
 
-Template.visualisation.helpers({
-  visualisation: "lineChart"
-});
-
-Template.visualisation.onRendered(function() {
-  if (!this.rendered) {
-    this.rendered = true;
-
-    var grid = $('.grid-stack').data('gridstack');
-    if (grid) {
-      var node = this.find("#nqm-vis-card-" + this.data._id);
-      grid.add_widget(node,0,0,4,2,true);
-    }
-  }
-  if (this.data) {
-    console.log("got visualisation data");
-  }
-});
-
 Template.visualisation.events({
   "click .nqm-close": function(event, template) {
-    Meteor.call("removeWidget", { id: template.data._id }, function(err,result) {
+    Meteor.call("removeWidget", template.data._id, function(err,result) {
       if (err) {
         Materialize.toast("failed to remove visualisation: " + err.message,10000);
       } else {
@@ -33,6 +14,25 @@ Template.visualisation.events({
     });
   }
 });
+
+Template.gridContent.onCreated(function() {
+  console.log("******* creating visualisatoin");
+});
+
+//Template.gridContent.onRendered(function() {
+//  if (!this.rendered) {
+//    this.rendered = true;
+//
+//    var grid = $('.grid-stack').data('gridstack');
+//    if (grid) {
+//      var node = this.find("#nqm-vis-card-" + this.data._id);
+//      grid.add_widget(node,0,0,4,2,true);
+//    }
+//  }
+//  if (this.data) {
+//    console.log("got visualisation data");
+//  }
+//});
 
 var doVisualisationRender = function() {
   var cfg = this.data;
@@ -56,6 +56,10 @@ startVisualisationSubscriptions = function() {
   var cfg = this.data;
   var vis = this._visualisation;
   var self = this;
+
+  if (this._subscription) {
+    console.log("***************** already subscribed");
+  }
 
   console.log("starting subscription for: " + cfg.name);
 
@@ -87,18 +91,17 @@ startVisualisationSubscriptions = function() {
           cfg.collection.push(d);
           doVisualisationRender.call(self);
         },
-        removed: function(d) {
-          // We should really use removedAt - which supplies an index (but is slow).
-          // Since this is time-series data we can be fairly sure it's the first time in the list
-          // that has been removed.
-          cfg.collection.splice(0,1);
+        removedAt: function(d,i) {
+          console.log("removing at: " + i);
+          cfg.collection.splice(i,1);
           doVisualisationRender.call(self);
         }
       });
 
       console.log(cfg.feedName + " data loaded: " + (Date.now() - timer));
       doVisualisationRender.call(self);
-      visualisationCache.add(cfg, vis, $("#nqm-vis-" + cfg._id).get(0));
+      self.visualisationPositionChanged = visualisationPositionChanged;
+      visualisationCache.add(cfg, self, $("#nqm-vis-" + cfg._id).get(0));
     }
   });
 };
@@ -113,4 +116,18 @@ stopVisualisationSubscriptions = function() {
     delete this._subscription;
   }
   visualisationCache.remove(this.data._id);
+};
+
+visualisationPositionChanged = function(x,y,w,h) {
+  this._visualisation.checkSize();
+  var update = {
+    _id: this.data._id,
+    position: {
+      x: x,
+      y: y,
+      w: w,
+      h: h
+    }
+  };
+  Meteor.call("updateWidgetPosition",update);
 };
