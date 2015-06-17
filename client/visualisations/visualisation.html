@@ -1,5 +1,5 @@
 <template name="visualisation">
-    {{#if position.x}}
+    {{#if position}}
       <div id="nqm-vis-{{_id}}" class="grid-stack-item" data-gs-x="{{position.x}}" data-gs-y="{{position.y}}" data-gs-width="{{position.w}}" data-gs-height="{{position.h}}">
           {{> gridContent}}
       </div>

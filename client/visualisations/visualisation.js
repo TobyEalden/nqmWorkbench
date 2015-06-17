@@ -19,20 +19,21 @@ Template.gridContent.onCreated(function() {
   console.log("******* creating visualisatoin");
 });
 
-//Template.gridContent.onRendered(function() {
-//  if (!this.rendered) {
-//    this.rendered = true;
-//
-//    var grid = $('.grid-stack').data('gridstack');
-//    if (grid) {
-//      var node = this.find("#nqm-vis-card-" + this.data._id);
-//      grid.add_widget(node,0,0,4,2,true);
-//    }
-//  }
-//  if (this.data) {
-//    console.log("got visualisation data");
-//  }
-//});
+Template.gridContent.onRendered(function() {
+  if (!this.rendered) {
+    this.rendered = true;
+
+    var grid = $('.grid-stack').data('gridstack');
+    if (grid) {
+      Materialize.toast(">>>>>>>>>>>>> manually updating widget",2000);
+      var node = this.find("#nqm-vis-" + this.data._id);
+      grid.update(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
+    }
+  }
+  if (this.data) {
+    console.log("got visualisation data");
+  }
+});
 
 var doVisualisationRender = function() {
   var cfg = this.data;
@@ -107,6 +108,8 @@ startVisualisationSubscriptions = function() {
 };
 
 stopVisualisationSubscriptions = function() {
+  console.log("stopping subscription for: " + this.data.name);
+
   if (this._watchdog) {
     this._watchdog.stop();
     delete this._watchdog;
@@ -120,14 +123,19 @@ stopVisualisationSubscriptions = function() {
 
 visualisationPositionChanged = function(x,y,w,h) {
   this._visualisation.checkSize();
+  this.data.position ={
+    x: x,
+    y: y,
+    w: w,
+    h: h
+  };
   var update = {
     _id: this.data._id,
-    position: {
-      x: x,
-      y: y,
-      w: w,
-      h: h
-    }
+    position: this.data.position
   };
-  Meteor.call("updateWidgetPosition",update);
+  Meteor.call("updateWidgetPosition",update, function(err, result) {
+    if (err) {
+      console.log("failed to save widget position: " + err.message);
+    }
+  });
 };
