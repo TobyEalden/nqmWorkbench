@@ -35,8 +35,7 @@ Template.widgetDetails.events({
       hubId: Session.get("dataSource").key.hubId,
       feedName: Session.get("dataSource").key.id,
       series: Session.get("seriesField"),
-      datum: Session.get("dataField"),
-      position: { x: 999, y: 999, w: 4, h: 2 }
+      datum: Session.get("dataField")
     };
     Meteor.call("addWidget", widget, function(err,result) {
       if (!err) {

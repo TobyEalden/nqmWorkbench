@@ -26,8 +26,11 @@ Template.gridContent.onRendered(function() {
     var grid = $('.grid-stack').data('gridstack');
     if (grid) {
       Materialize.toast(">>>>>>>>>>>>> manually updating widget",2000);
-      var node = this.find("#nqm-vis-" + this.data._id);
-      grid.update(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
+      var node = this.firstNode.parentNode; //this.find("#nqm-vis-" + this.data._id);
+//      grid.update(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
+      grid.add_widget(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
+      grid.movable(node,true);
+      grid.resizable(node,true);
     }
   }
   if (this.data) {
