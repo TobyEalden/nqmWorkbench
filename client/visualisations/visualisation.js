@@ -25,13 +25,27 @@ Template.gridContent.onRendered(function() {
 
     var grid = $('.grid-stack').data('gridstack');
     if (grid) {
-      Materialize.toast(">>>>>>>>>>>>> manually updating widget",2000);
-      var node = this.firstNode.parentNode; //this.find("#nqm-vis-" + this.data._id);
-//      grid.update(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
-      grid.add_widget(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
-      grid.movable(node,true);
-      grid.resizable(node,true);
+      Materialize.toast("manually adding widget",2000);
+      var node = this.firstNode.parentNode;
+
+      if (this.data.position) {
+        grid.add_widget(node,this.data.position.x,this.data.position.y,this.data.position.w,this.data.position.h);
+      } else {
+        grid.add_widget(node,undefined,undefined,4,2,true);
+      }
+    } else {
+      Materialize.toast("!!!grid not initialised!!!",2000);
     }
+
+    $('.dropdown-button').dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrain_width: false, // Does not change width of dropdown to that of the activator
+        hover: false, // Activate on hover
+        gutter: -95, // Spacing from edge
+        belowOrigin: true // Displays dropdown below the button
+      }
+    );
   }
   if (this.data) {
     console.log("got visualisation data");
@@ -125,8 +139,7 @@ stopVisualisationSubscriptions = function() {
 };
 
 visualisationPositionChanged = function(x,y,w,h) {
-  this._visualisation.checkSize();
-  this.data.position ={
+  this.data.position = {
     x: x,
     y: y,
     w: w,

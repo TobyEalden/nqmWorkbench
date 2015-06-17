@@ -1,10 +1,10 @@
 <template name="visualisation">
     {{#if position}}
-      <div id="nqm-vis-{{_id}}" class="grid-stack-item" data-gs-x="{{position.x}}" data-gs-y="{{position.y}}" data-gs-width="{{position.w}}" data-gs-height="{{position.h}}">
+      <div id="nqm-vis-{{_id}}" class="grid-stack-item" data-vis-id="{{_id}}" data-gs-x="{{position.x}}" data-gs-y="{{position.y}}" data-gs-width="{{position.w}}" data-gs-height="{{position.h}}">
           {{> gridContent}}
       </div>
     {{else}}
-      <div id="nqm-vis-{{_id}}" class="grid-stack-item" data-gs-auto-position="yes" data-gs-width="4" data-gs-height="2" >
+      <div id="nqm-vis-{{_id}}" class="grid-stack-item" data-vis-id="{{_id}}" data-gs-auto-position="yes" data-gs-width="4" data-gs-height="2" >
           {{> gridContent}}
       </div>
     {{/if}}

@@ -5,15 +5,15 @@
 var homeRoute =  {
   template: "home",
   layoutTemplate: "homeLayout",
-  loadingTemplate: "loadingTemplate",
-  waitOn: function() {
-    return Meteor.subscribe("vis");
-  },
-  data: function() {
-    return {
-      visualisations: visualisations.find().fetch()
-    }
-  }
+  loadingTemplate: "loadingTemplate"
+  //waitOn: function() {
+  //  return Meteor.subscribe("vis");
+  //},
+  //data: function() {
+  //  return {
+  //    visualisations: visualisations.find().fetch()
+  //  }
+  //}
 };
 
 Router.route("/", homeRoute);
